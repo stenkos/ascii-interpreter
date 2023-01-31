@@ -3,8 +3,14 @@
 # Author:          stenkos                                                     #
 # Git repository:  https://github.com/stenkos/ascii-interpreter.git            #
 # Date:            2023-01-31                                                  #
-# Version:         v1                                                          #
+# Version:         v2                                                          #
 # Purpose:         Input ASCII, return string or char                          #
+#------------------------------------------------------------------------------#
+# - - - - - - - - - - - - - - - - v2 Changelog - - - - - - - - - - - - - - - - #
+#                                                                              #
+# Backspace function implemented in strMode - use code 01111111 :-)            #
+# Wording cleared up                                                           #
+#                                                                              #
 #******************************************************************************#
 
 # This is a list of all OG ASCII characters
@@ -13,7 +19,8 @@ asciiConv = [None, None, None, None, None, None, None, None, None, None, None, N
 
 print("""This is stenkos's ASCII interpreter. To input characters, insert an ASCII
 binary code and press ENTER. Please note that in this program control characters
-are not included and will return "None".""")
+are not included and will return "None". Furthermore, the initial 0 of the byte
+does not need to be entered, as ASCII only uses 7 bits rather than 8.""")
 
 
 # Input a binary code, return a character
@@ -36,22 +43,29 @@ def strMode():
             character = int(input(), 2)
         except ValueError:
             break
-        string = string + asciiConv[character] # build string
+        if character == 127:
+            string = string[:-1] # delete function
+        else:
+            string = string + asciiConv[character] # build string
         print(string)
 
 
 print("""
 charMode is a simple mode, where you can test your knowledge of ASCII codes by
 inputting codes to return single characters. strMode is fundamentally the same,
-except you can construct fully-fledged strings.""")
+except you can construct fully-fledged strings.
+
+strMode has a delete function which can delete the last entered character from
+the string - type 0111 1111""")
 
 
 
 # main looping program
 while True:
     prompt = input("""
-Would you like to use charMode or strMode? Please note that only binary input is
-accepted and inputting strings will bring you back to this menu.
+Would you like to use charMode or strMode? Type 'charmode' for charMode and
+'strmode' for strMode. Once in these modes only binary input is accepted, and
+inputting strings will bring you back to this menu.
 
 To exit type 'exit' at this prompt.
 """)
